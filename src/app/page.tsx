@@ -3,15 +3,20 @@ import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
 import { ProjectCard } from "@/components/project-card";
 import { ResumeCard } from "@/components/resume-card";
+import { AnimatedTooltip } from "@/components/ui/animated-tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { DATA } from "@/data/resume";
+import { IconCloud } from "@/components/ui/icon-cloud";
+import { DATA, people, slugs } from "@/data/resume";
 import Link from "next/link";
 import Markdown from "react-markdown";
 
 const BLUR_FADE_DELAY = 0.04;
 
 export default function Page() {
+  const images = slugs.map(
+    (slug) => `https://cdn.simpleicons.org/${slug}/${slug}`
+  );
   return (
     <main className="flex flex-col min-h-[100dvh] space-y-10">
       <section id="hero">
@@ -39,14 +44,32 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      <BlurFade delay={BLUR_FADE_DELAY * 3}>
+        <div className="flex flex-row items-start justify-start mt-5 w-full">
+          <AnimatedTooltip items={people} />
+        </div>
+      </BlurFade>
+
       <section id="about">
         <BlurFade delay={BLUR_FADE_DELAY * 3}>
           <h2 className="text-xl font-bold">About</h2>
         </BlurFade>
         <BlurFade delay={BLUR_FADE_DELAY * 4}>
-          <Markdown className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
-            {DATA.summary}
-          </Markdown>
+          <div className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
+            <Markdown
+              components={{
+                a: ({ node, ...props }) => (
+                  <a
+                    {...props}
+                    className="underline text-black hover:text-gray-600 font-semibold dark:text-white"
+                  />
+                ),
+              }}
+            >
+              {DATA.summary}
+            </Markdown>
+          </div>
         </BlurFade>
       </section>
       <section id="work">
@@ -102,13 +125,19 @@ export default function Page() {
           <BlurFade delay={BLUR_FADE_DELAY * 9}>
             <h2 className="text-xl font-bold">Skills</h2>
           </BlurFade>
-          <div className="flex flex-wrap gap-1">
+          <BlurFade delay={BLUR_FADE_DELAY * 9}>
+            <div className="relative flex size-full items-center justify-center overflow-hidden">
+              <IconCloud images={images} />
+            </div>
+          </BlurFade>
+
+          {/* <div className="flex flex-wrap gap-1">
             {DATA.skills.map((skill, id) => (
               <BlurFade key={skill} delay={BLUR_FADE_DELAY * 10 + id * 0.05}>
                 <Badge key={skill}>{skill}</Badge>
               </BlurFade>
             ))}
-          </div>
+          </div> */}
         </div>
       </section>
       <section id="projects">
